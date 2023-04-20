@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 
 class IndexController {
-  echo(req: Request, res: Response) {
-    res.send('echo');
+  rednerHomePage(req: Request, res: Response) {
+    res.render('index', { title: 'sing-dash' });
   }
 }
 

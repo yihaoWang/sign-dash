@@ -10,7 +10,7 @@ class IndexRoute extends Route {
   }
 
   protected setRoutes() {
-    this.router.get('/', this.signInController.echo);
+    this.router.get('/', this.signInController.rednerHomePage);
   }
 }
 

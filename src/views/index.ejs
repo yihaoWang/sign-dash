@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign Up or Sign In</title>
+</head>
+<body>
+  <h1>Welcome!</h1>
+  <button id="signup-button">Sign Up</button>
+  <button id="signin-button">Sign In</button>
+
+  <script>
+    const signupButton = document.getElementById('signup-button');
+    const signinButton = document.getElementById('signin-button');
+
+    signupButton.addEventListener('click', () => {
+      window.location.href = '/signup';
+    });
+
+    signinButton.addEventListener('click', () => {
+      window.location.href = '/signin';
+    });
+  </script>
+</body>
+</html>
