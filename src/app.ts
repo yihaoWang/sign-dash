@@ -1,7 +1,6 @@
 import express from "express";
 import morgan from "morgan";
-
-import indexRouter from './routes';
+import { router } from "./router";
 
 const app:express.Application = express();
 
@@ -9,6 +8,8 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/', indexRouter);
+for (const route of router) {
+  app.use(route.getPrefix(), route.getRouter());
+}
 
 module.exports = app;
