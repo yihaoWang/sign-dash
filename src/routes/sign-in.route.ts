@@ -1,7 +1,7 @@
-import SignInController from "../controllers/sign-in.controller"
-import Route from "./route";
+import SignInController from '../controllers/sign-in.controller';
+import Route from './route';
 
-class SignInRoute extends Route{
+class SignInRoute extends Route {
   private signInController = new SignInController();
 
   constructor() {

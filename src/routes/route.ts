@@ -1,9 +1,11 @@
-import { Router } from "express";
+import { Router } from 'express';
 
 abstract class Route {
   protected router = Router();
+
   protected abstract setRoutes(): void;
-  protected prefix: string = '/';
+
+  protected prefix = '/';
 
   public getRouter() {
     return this.router;

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
 class SignUpController {
   echo(req: Request, res: Response) {

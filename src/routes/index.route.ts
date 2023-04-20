@@ -1,7 +1,7 @@
-import IndexController from "../controllers/index.controller"
-import Route from "./route";
+import IndexController from '../controllers/index.controller';
+import Route from './route';
 
-class IndexRoute extends Route{
+class IndexRoute extends Route {
   private signInController = new IndexController();
 
   constructor() {

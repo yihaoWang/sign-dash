@@ -4,14 +4,14 @@
  * Module dependencies.
  */
 
-var app = require('../build/app');
+const { log } = require('console');
+var app = require('../build/app').default;
 var debug = require('debug')('maabackend:server');
 var http = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
-
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
