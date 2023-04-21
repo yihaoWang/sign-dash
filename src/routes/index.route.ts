@@ -2,7 +2,7 @@ import IndexController from '../controllers/index.controller';
 import Route from './route';
 
 class IndexRoute extends Route {
-  private signInController = new IndexController();
+  private indexController = new IndexController();
 
   constructor() {
     super();
@@ -10,7 +10,7 @@ class IndexRoute extends Route {
   }
 
   protected setRoutes() {
-    this.router.get('/', this.signInController.rednerHomePage);
+    this.router.get('/', this.indexController.rednerHomePage);
   }
 }
 
