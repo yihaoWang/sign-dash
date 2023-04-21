@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 
 class SignInController {
-  echo(req: Request, res: Response) {
-    res.send('echo');
+  renderSignInPage(req: Request, res: Response) {
+    res.render('signin', { title: 'sing-dash' });
   }
 }
 
