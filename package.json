@@ -6,11 +6,11 @@
   "scripts": {
     "tsc": "tsc",
     "clean": "rm -rf ./build/",
-    "copy-assets": "cp -r ./src/views ./build/",
+    "copy-assets": "cp -r ./src/views ./src/public ./build/",
     "start": "node ./bin/www",
     "build": "npm-run-all clean tsc copy-assets",
     "dev:start": "npm-run-all build start",
-    "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
+    "dev": "nodemon --watch src -e ts,ejs,.css --exec npm run dev:start",
     "lint": "eslint --ext .ts,.js ./src"
   },
   "author": "",

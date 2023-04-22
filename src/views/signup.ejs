@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/css/styles.css">
+  </head>
+  <body>
+    <div class="container">
+      <dev class="login">
+        <dev>
+          <script src="https://accounts.google.com/gsi/client" async defer></script>
+          <div id="g_id_onload"
+            data-client_id=<%= googleClientId %>
+            data-login_uri=<%= googleAuthCallback %>
+            data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin"
+            data-type="standard"
+            data-size="large"
+            data-theme="outline"
+            data-text="sign_in_with"
+            data-shape="rectangular"
+            data-width="360"
+            data-logo_alignment="left">
+          </div>
+        </dev>
+        <div class="form">
+          <form action="/signup/user" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Register</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
