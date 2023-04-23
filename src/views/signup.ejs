@@ -1,12 +1,13 @@
 <html>
   <head>
     <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <div class="container">
       <dev class="login">
         <dev>
-          <script src="https://accounts.google.com/gsi/client" async defer></script>
           <div id="g_id_onload"
             data-client_id=<%= googleClientId %>
             data-login_uri=<%= googleAuthCallback %>
@@ -23,17 +24,48 @@
           </div>
         </dev>
         <div class="form">
-          <form action="/signup/user" method="POST">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-
+          <form id="signup-form">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
-
+            <div id="error-message" class="error"></div>
             <button type="submit">Register</button>
           </form>
         </div>
       </div>
     </div>
+    <script>
+      const form = document.getElementById('signup-form');
+      const errorMessage = document.getElementById('error-message');
+      const invalidPasswordErrorMessage = 'Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.';
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+[\]{};':"\\|,.<>\/?]).{8,}$/;
+
+        if (!passwordRegex.test(password)) {
+          const errorElement = document.getElementById('error-message');
+
+          errorMessage.textContent = invalidPasswordErrorMessage;
+
+          return;
+        }
+
+        try {
+          const response = await axios.post('/signup/account', {
+            email: email,
+            password: password
+          });
+
+          window.location.href = '/';
+        } catch (error) {
+          errorMessage.textContent = error.response.data.message;
+        }
+      });
+    </script>
   </body>
 </html>
