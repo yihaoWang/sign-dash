@@ -11,7 +11,7 @@ class SignInRoute extends Route {
   }
 
   protected setRoutes() {
-    this.router.get('/', this.signInController.renderSignInPage);
+    this.router.get('/', this.signInController.renderSignInPage.bind(this.signInController));
   }
 }
 

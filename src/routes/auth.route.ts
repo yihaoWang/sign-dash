@@ -11,7 +11,7 @@ class AuthRoute extends Route {
   }
 
   protected setRoutes() {
-    this.router.post('/google/callback', this.authController.googleAuthCallback);
+    this.router.post('/google/callback', this.authController.googleAuthCallback.bind(this.authController));
   }
 }
 

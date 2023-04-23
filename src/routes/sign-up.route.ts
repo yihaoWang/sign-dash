@@ -11,7 +11,7 @@ class SignUpRoute extends Route {
   }
 
   protected setRoutes() {
-    this.router.get('/', this.signUpController.renderSignUpPage);
+    this.router.get('/', this.signUpController.renderSignUpPage.bind(this.signUpController));
     this.router.post('/account', this.signUpController.createAccount.bind(this.signUpController));
   }
 }
