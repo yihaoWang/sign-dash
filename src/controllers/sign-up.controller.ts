@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import config from 'config';
 import bcrypt from 'bcrypt';
+import config from '../config';
 import AccountModule from '../modules/account.module';
 
-const DOMAIN = config.get('app.domain');
-const GOOGLE_CLIENT_ID = config.get('auth.google.clientId');
-const GOOGLE_AUTH_CALLBACK_POSTFIX = config.get('auth.google.callbackUrl');
+const DOMAIN = config.app.domain;
+const GOOGLE_CLIENT_ID = config.googleAuth.clientId;
+const GOOGLE_AUTH_CALLBACK_POSTFIX = config.googleAuth.callbackUrl;
 const GOOGLE_AUTH_CALLBACK = `${DOMAIN}${GOOGLE_AUTH_CALLBACK_POSTFIX}`;
 
 class SignUpController {
