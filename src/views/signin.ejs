@@ -1,18 +1,66 @@
 <html>
+  <head>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
   <body>
-      <script src="https://accounts.google.com/gsi/client" async defer></script>
-      <div id="g_id_onload"
-        data-client_id=<%= googleClientId %>
-        data-login_uri=<%= googleAuthCallback %>
-        data-auto_prompt="false">
+    <div class="container">
+      <dev class="login">
+        <dev>
+          <div id="g_id_onload"
+            data-client_id=<%= googleClientId %>
+            data-login_uri=<%= googleAuthCallback %>
+            data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin"
+            data-type="standard"
+            data-size="large"
+            data-theme="outline"
+            data-text="sign_in_with"
+            data-shape="rectangular"
+            data-width="360"
+            data-logo_alignment="left">
+          </div>
+        </dev>
+        <div class="form">
+          <form id="signup-form">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <div id="error-message" class="error"></div>
+            <button id="submit-btn" type="submit">Login</button>
+          </form>
+        </div>
       </div>
-      <div class="g_id_signin"
-        data-type="standard"
-        data-size="large"
-        data-theme="outline"
-        data-text="sign_in_with"
-        data-shape="rectangular"
-        data-logo_alignment="left">
-      </div>
+    </div>
+    <script>
+      const form = document.getElementById('signup-form');
+      const submitBtn = document.getElementById('submit-btn');
+      const errorMessage = document.getElementById('error-message');
+      const invalidPasswordErrorMessage = 'Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.';
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        submitBtn.disabled = true;
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+          const response = await axios.post('/auth/email-login', {
+            email: email,
+            password: password
+          });
+
+          window.location.href = '/dashboard';
+        } catch (error) {
+          errorMessage.textContent = error.response.data.message;
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    </script>
   </body>
 </html>

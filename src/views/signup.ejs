@@ -30,18 +30,20 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
             <div id="error-message" class="error"></div>
-            <button type="submit">Register</button>
+            <button id="submit-btn" type="submit">Register</button>
           </form>
         </div>
       </div>
     </div>
     <script>
       const form = document.getElementById('signup-form');
+      const submitBtn = document.getElementById('submit-btn');
       const errorMessage = document.getElementById('error-message');
       const invalidPasswordErrorMessage = 'Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.';
 
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
+        submitBtn.disabled = true;
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
@@ -61,9 +63,11 @@
             password: password
           });
 
-          window.location.href = '/';
+          window.location.href = '/auth/active-account';
         } catch (error) {
           errorMessage.textContent = error.response.data.message;
+        } finally {
+          submitBtn.disabled = false;
         }
       });
     </script>

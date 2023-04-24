@@ -8,11 +8,25 @@ datasource db {
 }
 
 model accounts {
-  id             Int      @id @default(autoincrement())
-  name           String?  @db.VarChar(255)
-  google_id      String?  @unique @db.Uuid
-  facebook_id    String?  @unique @db.Uuid
-  email          String   @unique @db.VarChar(255)
-  password       String?  @db.VarChar(255)
-  email_verified Boolean? @default(false)
+  id             Int       @id @default(autoincrement())
+  name           String?   @db.VarChar(255)
+  google_id      String?   @unique @db.Uuid
+  facebook_id    String?   @unique @db.Uuid
+  email          String    @unique @db.VarChar(255)
+  password       String?   @db.VarChar(255)
+  email_verified Boolean?  @default(false)
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @default(now()) @db.Timestamp(6)
+  register_from  String    @db.VarChar(255)
+}
+
+model emailverificationcodes {
+  id         Int      @id @default(autoincrement())
+  email      String   @db.VarChar(255)
+  code       String   @unique @db.VarChar(10)
+  is_used    Boolean  @default(false)
+  updated_at DateTime @default(now()) @db.Timestamp(6)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+
+  @@index([code], map: "email_verification_codes_code_idx")
 }

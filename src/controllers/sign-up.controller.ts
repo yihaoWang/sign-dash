@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import config from '../config';
 import AccountModule from '../modules/account.module';
+import EmailSender from '../modules/email-sender.module';
+import SessionModel from '../modules/session.module';
 
 const DOMAIN = config.app.domain;
 const GOOGLE_CLIENT_ID = config.googleAuth.clientId;
@@ -24,7 +26,7 @@ class SignUpController {
   }
 
   async isAccountExists(email: string): Promise<Boolean> {
-    return Boolean(await AccountModule.getByEmail(email));
+    return Boolean(await AccountModule.getAccountByEmail(email));
   }
 
   async createAccount(req: Request, res: Response) {
@@ -38,10 +40,25 @@ class SignUpController {
       return res.status(400).json({ message: 'Email is already registered.' });
     }
 
-    await AccountModule.create({
+
+    const account = await AccountModule.create({
       email: email,
       password: bcrypt.hashSync(password, 10),
+      register_from: 'email',
     });
+    SessionModel.setUserSession(
+      req,
+      {
+        id: account.id,
+        email: account.email,
+        name: account.name || '',
+        emailVerified: account.email_verified || false,
+        from: account.register_from,
+      }
+    );
+    const verificationCode = await AccountModule.createVerificationCode(email);
+
+    await EmailSender.sendVerificationEmail(email, verificationCode);
     res.sendStatus(200);
   }
 }

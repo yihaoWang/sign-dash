@@ -2,23 +2,27 @@
 <html>
 <head>
   <title>Sign Up or Sign In</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
-  <h1>Welcome!</h1>
-  <button id="signup-button">Sign Up</button>
-  <button id="signin-button">Sign In</button>
+  <div class="container">
+    <h1>Welcome to Sign Dash!</h1>
+    <div class="inner-container">
+      <button id="signin-button">Login</button>
+      <button id="signup-button">Sign up</button>
+    </div>
+    <script>
+      const signupButton = document.getElementById('signup-button');
+      const signinButton = document.getElementById('signin-button');
 
-  <script>
-    const signupButton = document.getElementById('signup-button');
-    const signinButton = document.getElementById('signin-button');
+      signupButton.addEventListener('click', () => {
+        window.location.href = '/signup';
+      });
 
-    signupButton.addEventListener('click', () => {
-      window.location.href = '/signup';
-    });
-
-    signinButton.addEventListener('click', () => {
-      window.location.href = '/signin';
-    });
-  </script>
+      signinButton.addEventListener('click', () => {
+        window.location.href = '/signin';
+      });
+    </script>
+  </div>
 </body>
 </html>
