@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand">My Dashboard</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="/dashboard/profile">User Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard/statistics">Dashboard</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="col-md-9">
+        <h3>Statistics</h3>
+        <p>Total number of users who have signed up: <%= stats.totalUsers %></p>
+        <p>Total number of users with active sessions today: <%= stats.dailyActiveUsers %></p>
+        <p>Average number of active session users in the last 7 days rolling: <%= stats.avgActiveUsers %></p>
+        <h3>User Database</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Register From</th>
+              <th>Signup Time</th>
+              <th>Last Session Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach(function(user) { %>
+              <tr>
+                <td><%= user.email %></td>
+                <td><%= user.timestamp %></td>
+                <td><%= user.loginCount %></td>
+                <td><%= user.lastSession %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
