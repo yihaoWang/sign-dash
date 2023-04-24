@@ -1,37 +1,51 @@
 <html>
   <head>
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <title>Sign Up</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
-  <body>
+  <body class="d-flex justify-content-center align-items-center">
     <div class="container">
-      <dev class="login">
-        <dev>
-          <div id="g_id_onload"
-            data-client_id=<%= googleClientId %>
-            data-login_uri=<%= googleAuthCallback %>
-            data-auto_prompt="false">
+      <div class="row justify-content-center">
+        <div class="col-md-4 col-sm-12">
+          <div class="login">
+            <div>
+              <div id="g_id_onload"
+                data-client_id=<%= googleClientId %>
+                data-login_uri=<%= googleAuthCallback %>
+                data-auto_prompt="false">
+              </div>
+              <div class="g_id_signin"
+                data-type="standard"
+                data-size="large"
+                data-theme="outline"
+                data-text="sign_in_with"
+                data-shape="rectangular"
+                data-width="350"
+                data-logo_alignment="left">
+              </div>
+            </div>
+            <div class="form">
+              <form id="signup-form">
+                <div class="form-group">
+                  <label for="email">Email:</label>
+                  <input type="text" id="email" class="form-control" name="email" required>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password:</label>
+                  <input type="password" id="password" name="password" required class="form-control">
+                </div>
+                <div id="error-message" class="text-danger"></div>
+                <button id="submit-btn" type="submit" class="btn btn-primary btn-block">Login</button>
+              </form>
+            </div>
           </div>
-          <div class="g_id_signin"
-            data-type="standard"
-            data-size="large"
-            data-theme="outline"
-            data-text="sign_in_with"
-            data-shape="rectangular"
-            data-width="360"
-            data-logo_alignment="left">
-          </div>
-        </dev>
-        <div class="form">
-          <form id="signup-form">
-            <label for="email">Email:</label>
-            <input type="text" id="email" name="email" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <div id="error-message" class="error"></div>
-            <button id="submit-btn" type="submit">Register</button>
-          </form>
         </div>
       </div>
     </div>

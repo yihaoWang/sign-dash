@@ -2,27 +2,34 @@
 <html>
 <head>
   <title>Sign Up or Sign In</title>
-  <link rel="stylesheet" href="/static/css/styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body class="d-flex justify-content-center align-items-center">
   <div class="container">
-    <h1>Welcome to Sign Dash!</h1>
-    <div class="inner-container">
-      <button id="signin-button">Login</button>
-      <button id="signup-button">Sign up</button>
-    </div>
-    <script>
-      const signupButton = document.getElementById('signup-button');
-      const signinButton = document.getElementById('signin-button');
+      <h1 class="text-center">Welcome to Sign Dash!</h1>
+      <div class="form-group d-flex justify-content-center align-items-center">
+        <button id="signin-button" class="btn btn-primary">Login</button>
+      </div>
+      <div class="form-group d-flex justify-content-center align-items-center">
+        <button id="signup-button" class="btn btn-primary">Sign up</button>
+      </div>
+      <script>
+        const signupButton = document.getElementById('signup-button');
+        const signinButton = document.getElementById('signin-button');
 
-      signupButton.addEventListener('click', () => {
-        window.location.href = '/signup';
-      });
+        signupButton.addEventListener('click', () => {
+          window.location.href = '/signup';
+        });
 
-      signinButton.addEventListener('click', () => {
-        window.location.href = '/signin';
-      });
-    </script>
+        signinButton.addEventListener('click', () => {
+          window.location.href = '/signin';
+        });
+      </script>
   </div>
 </body>
 </html>

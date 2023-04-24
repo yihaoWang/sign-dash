@@ -6,7 +6,7 @@
   "scripts": {
     "tsc": "tsc",
     "clean": "rm -rf ./build/",
-    "copy-assets": "cp -r ./src/views ./src/public ./build/",
+    "copy-assets": "cp -r ./src/views ./build/",
     "start": "node ./bin/www",
     "build": "npm-run-all clean tsc copy-assets",
     "dev:start": "npm-run-all build start",
