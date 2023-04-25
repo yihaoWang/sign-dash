@@ -19,12 +19,6 @@ class SignUpController {
     });
   }
 
-  isValidPassword(password: string): Boolean {
-    const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+[\]{};':"\\|,.<>\/?]).{8,}$/;
-
-    return regex.test(password);
-  }
-
   async isAccountExists(email: string): Promise<Boolean> {
     return Boolean(await AccountModule.getAccountByEmail(email));
   }
@@ -32,7 +26,7 @@ class SignUpController {
   async createAccount(req: Request, res: Response) {
     const { email, password } = req.body;
 
-    if (!this.isValidPassword(password)) {
+    if (!AccountModule.isValidPassword(password)) {
       return res.status(400).json({ message: 'Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.' });
     }
 
@@ -41,7 +35,7 @@ class SignUpController {
     }
 
 
-    const account = await AccountModule.create({
+    const account = await AccountModule.createAccount({
       email: email,
       password: bcrypt.hashSync(password, 10),
       register_from: 'email',

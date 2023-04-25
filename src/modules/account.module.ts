@@ -13,16 +13,40 @@ interface IAccount {
   register_from: string;
 }
 
+interface IAccountUpdateFields {
+  name?: string;
+  password?: string;
+}
+
 export default class AccountModule {
-  static async create(accountInfo: IAccount) {
+  static isValidPassword(password: string): Boolean {
+    const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+[\]{};':"\\|,.<>\/?]).{8,}$/;
+
+    return regex.test(password);
+  }
+
+  static async createAccount(accountInfo: IAccount) {
     return await prisma.accounts.create({
       data: accountInfo,
+    });
+  }
+
+  static async getAccountById(uid: number) {
+    return await prisma.accounts.findUnique({
+      where: { id: uid },
     });
   }
 
   static async getAccountByEmail(email: string) {
     return await prisma.accounts.findUnique({
       where: { email },
+    });
+  }
+
+  static async updateAccountById(uid: number, data: IAccountUpdateFields) {
+    return await prisma.accounts.update({
+      where: { id: uid },
+      data: data,
     });
   }
 

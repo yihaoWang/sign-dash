@@ -1,9 +1,22 @@
 import { Request, Response } from 'express';
+import AccountModule from '../modules/account.module';
 
 class DashboardController {
-  rednerProfilePage(req: Request, res: Response) {
+  async rednerProfilePage(req: Request, res: Response) {
+    const uid = req.session.user?.id;
+
+    if (!uid) {
+      return res.redirect('/signin');
+    }
+
+    const account = await AccountModule.getAccountById(uid);
+
+    if (!account) {
+      return res.redirect('/signin');
+    }
+
     res.render('dashboard-profile', {
-      user: { email: 'example@gmail.com', name: 'Example User' },
+      user: { email: account.email, name: account.name },
     });
   }
 
