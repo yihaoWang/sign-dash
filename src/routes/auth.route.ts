@@ -13,7 +13,6 @@ class AuthRoute extends Route {
 
   protected setRoutes() {
     this.router.post('/google/callback', this.authController.googleAuthCallback.bind(this.authController));
-    this.router.post('/email-login', this.authController.loginByEmail.bind(this.authController));
     this.router.get('/email-verification', this.authController.verifyVerificationCode.bind(this.authController));
     this.router.get('/active-account', requireAuthentication(false), this.authController.renderActiveAccountPage.bind(this.authController));
     this.router.post('/resend-account-verification', requireAuthentication(false), this.authController.resendAccountVerification.bind(this.authController));
