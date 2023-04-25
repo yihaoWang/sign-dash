@@ -12,7 +12,7 @@
       <div class="row justify-content-center">
         <div class="col-md-4 col-sm-12">
           <div class="login">
-            <div>
+            <div class="mb-3">
               <div id="g_id_onload"
                 data-client_id=<%= googleClientId %>
                 data-login_uri=<%= googleAuthCallback %>
@@ -32,13 +32,13 @@
               <form id="signup-form">
                 <div class="form-group">
                   <label for="email">Email:</label>
-                  <input type="text" id="email" class="form-control" name="email" required>
+                  <input type="text" id="email" name="email" class="form-control mb-3" required>
                 </div>
                 <div class="form-group">
                   <label for="password">Password:</label>
-                  <input type="password" id="password" name="password" required class="form-control">
+                  <input type="password" id="password" name="password" required class="form-control mb-3">
                 </div>
-                <div id="error-message" class="error"></div>
+                <div id="error-message" class="error mb-3"></div>
                 <button type="submit" id="submit-btn" class="btn btn-primary btn-block">Login</button>
               </form>
             </div>
