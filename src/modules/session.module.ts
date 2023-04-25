@@ -1,3 +1,4 @@
+import { Prisma, accounts } from '@prisma/client'
 import { Request } from 'express';
 
 const _10_MINS_IN_MS = 10 * 60 * 1000;
@@ -11,13 +12,13 @@ export interface IUserSession {
 }
 
 export default class SessionModel {
-  static setUserSession(req: Request, account: IUserSession) {
+  static setUserSession(req: Request, account: accounts) {
     req.session.user = {
       id: account.id,
       email: account.email,
       name: account.name || '',
-      emailVerified: account.emailVerified,
-      from: account.from,
+      emailVerified: account.email_verified || false,
+      from: account.register_from,
     };
 
     req.session.lastSessionAt = Date.now();

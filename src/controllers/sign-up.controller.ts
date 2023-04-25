@@ -41,15 +41,7 @@ class SignUpController {
       login_count: 1,
       last_session_at: new Date(),
     });
-    SessionModel.setUserSession(
-      req,
-      {
-        id: account.id,
-        email: account.email,
-        emailVerified: account.email_verified || false,
-        from: account.register_from,
-      }
-    );
+    SessionModel.setUserSession(req, account);
     const verificationCode = await AccountModule.createVerificationCode(email);
 
     await EmailSender.sendVerificationEmail(email, verificationCode);

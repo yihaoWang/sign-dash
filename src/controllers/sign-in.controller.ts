@@ -34,16 +34,7 @@ class SignInController {
       login_count: account.login_count + 1,
       last_session_at: new Date(),
     });
-    SessionModel.setUserSession(
-      req,
-      {
-        id: account.id,
-        email: account.email,
-        name: account.name || '',
-        emailVerified: account.email_verified || false,
-        from: account.register_from,
-      }
-    );
+    SessionModel.setUserSession(req, account);
     res.sendStatus(200);
   }
 }
