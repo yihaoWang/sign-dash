@@ -12,8 +12,8 @@ class DashboardRoute extends Route {
   }
 
   protected setRoutes() {
-    this.router.get(['/', '/profile'], this.dashboardController.rednerProfilePage.bind(this.dashboardController));
-    this.router.get('/statistics', this.dashboardController.rednerStatisticsPage.bind(this.dashboardController));
+    this.router.get(['/', '/profile'], requireAuthentication(), this.dashboardController.rednerProfilePage.bind(this.dashboardController));
+    this.router.get('/statistics', requireAuthentication(), this.dashboardController.rednerStatisticsPage.bind(this.dashboardController));
   }
 }
 

@@ -1,11 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
-import { IUserSession } from '../modules/session.module';
+import SessionModel, { IUserSession } from '../modules/session.module';
 import AccountModule from '../modules/account.module';
 
 export function requireAuthentication(requireAccountActive = true) {
   return async (req: Request, res: Response, next: NextFunction) => {
     if (!req.session.user) {
       return res.redirect('/');
+    }
+
+    if (SessionModel.shouldUpdateSessionTime(req)) {
+      SessionModel.updateSessionTime(req);
+      AccountModule.updateAccountById(req.session.user.id, { last_session_at: new Date() });  // don't wait
     }
 
     if (requireAccountActive && !await isAccountActive(req.session.user)) {
@@ -16,13 +21,13 @@ export function requireAuthentication(requireAccountActive = true) {
 }
 
 async function isAccountActive(userSession: IUserSession): Promise<boolean> {
-  const { from, emailVerified, email } = userSession;
+  const { from, emailVerified, id } = userSession;
 
   if (from === 'email' && emailVerified === true) {
     return true;
   }
 
-  const account = await AccountModule.getAccountByEmail(email);
+  const account = await AccountModule.getAccountById(id);
 
   return Boolean(account && account.email_verified === true);
 }

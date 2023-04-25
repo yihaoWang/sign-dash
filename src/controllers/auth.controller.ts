@@ -49,6 +49,10 @@ class AuthController {
       return res.status(400).json({ message: 'Invalid email or password.' });
     }
 
+    await AccountModule.updateAccountById(account.id, {
+      login_count: account.login_count + 1,
+      last_session_at: new Date(),
+    });
     SessionModel.setUserSession(
       req,
       {

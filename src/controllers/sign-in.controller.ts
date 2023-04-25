@@ -14,11 +14,6 @@ class SignInController {
       googleClientId: GOOGLE_CLIENT_ID,
     });
   }
-
-  logout(req: Request, res: Response) {
-    req.session.user = undefined;
-    res.redirect('/');
-  }
 }
 
 export default SignInController;

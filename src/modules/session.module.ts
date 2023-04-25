@@ -1,5 +1,7 @@
 import { Request } from 'express';
 
+const _10_MINS_IN_MS = 10 * 60 * 1000;
+
 export interface IUserSession {
   id: number;
   name?: string;
@@ -17,5 +19,17 @@ export default class SessionModel {
       emailVerified: account.emailVerified,
       from: account.from,
     };
+
+    req.session.lastSessionAt = Date.now();
+  }
+
+  static shouldUpdateSessionTime(req: Request) {
+    if (!req.session.lastSessionAt) return true;
+
+    return req.session.lastSessionAt < (Date.now() - _10_MINS_IN_MS)
+  }
+
+  static updateSessionTime(req: Request) {
+    req.session.lastSessionAt = Date.now();
   }
 }

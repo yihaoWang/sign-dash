@@ -34,18 +34,18 @@ class SignUpController {
       return res.status(400).json({ message: 'Email is already registered.' });
     }
 
-
     const account = await AccountModule.createAccount({
       email: email,
       password: bcrypt.hashSync(password, 10),
       register_from: 'email',
+      login_count: 1,
+      last_session_at: new Date(),
     });
     SessionModel.setUserSession(
       req,
       {
         id: account.id,
         email: account.email,
-        name: account.name || '',
         emailVerified: account.email_verified || false,
         from: account.register_from,
       }

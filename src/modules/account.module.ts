@@ -1,22 +1,7 @@
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 import randomstring from 'randomstring';
 
 const prisma = new PrismaClient();
-
-interface IAccount {
-  name?: string;
-  google_id?: string;
-  facebook_id?: string;
-  email: string;
-  password?: string;
-  email_verified?: boolean;
-  register_from: string;
-}
-
-interface IAccountUpdateFields {
-  name?: string;
-  password?: string;
-}
 
 export default class AccountModule {
   static isValidPassword(password: string): Boolean {
@@ -25,8 +10,8 @@ export default class AccountModule {
     return regex.test(password);
   }
 
-  static async createAccount(accountInfo: IAccount) {
-    return await prisma.accounts.create({
+  static async createAccount(accountInfo: Prisma.accountsCreateInput) {
+    return prisma.accounts.create({
       data: accountInfo,
     });
   }
@@ -38,16 +23,20 @@ export default class AccountModule {
   }
 
   static async getAccountByEmail(email: string) {
-    return await prisma.accounts.findUnique({
+    return prisma.accounts.findUnique({
       where: { email },
     });
   }
 
-  static async updateAccountById(uid: number, data: IAccountUpdateFields) {
-    return await prisma.accounts.update({
+  static async updateAccountById(uid: number, data: Prisma.accountsUpdateInput) {
+    return prisma.accounts.update({
       where: { id: uid },
       data: data,
     });
+  }
+
+  static async getAllAccounts(select: Prisma.accountsSelect) {
+    return prisma.accounts.findMany({ select });
   }
 
   static async createVerificationCode(email: string) {

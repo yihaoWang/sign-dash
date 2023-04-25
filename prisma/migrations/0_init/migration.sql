@@ -7,9 +7,11 @@ CREATE TABLE "accounts" (
     "email" VARCHAR(255) NOT NULL,
     "password" VARCHAR(255),
     "email_verified" BOOLEAN DEFAULT false,
-    "created_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "register_from" VARCHAR(255) NOT NULL,
+    "login_count" INTEGER NOT NULL DEFAULT 0,
+    "last_session_at" TIMESTAMP(6) NOT NULL,
 
     CONSTRAINT "accounts_pkey" PRIMARY KEY ("id")
 );

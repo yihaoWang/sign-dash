@@ -25,32 +25,34 @@
     </nav>
 
     <div class="container">
-      <div class="col-md-9">
-        <h3>Statistics</h3>
-        <p>Total number of users who have signed up: <%= stats.totalUsers %></p>
-        <p>Total number of users with active sessions today: <%= stats.dailyActiveUsers %></p>
-        <p>Average number of active session users in the last 7 days rolling: <%= stats.avgActiveUsers %></p>
-        <h3>User Database</h3>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Register From</th>
-              <th>Signup Time</th>
-              <th>Last Session Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% users.forEach(function(user) { %>
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-sm-12">
+          <h3>Statistics</h3>
+          <p>Total number of users who have signed up: <%= stats.totalUsers %></p>
+          <p>Total number of users with active sessions today: <%= stats.dailyActiveUsers %></p>
+          <p>Average number of active session users in the last 7 days rolling: <%= stats.avgActiveUsers %></p>
+          <h3>User Database</h3>
+          <table class="table">
+            <thead>
               <tr>
-                <td><%= user.email %></td>
-                <td><%= user.timestamp %></td>
-                <td><%= user.loginCount %></td>
-                <td><%= user.lastSession %></td>
+                <th>Email</th>
+                <th>Sign up time</th>
+                <th>Logged in time</th>
+                <th>Last session</th>
               </tr>
-            <% }); %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <% users.forEach(function(user) { %>
+                <tr>
+                  <td><%= user.email %></td>
+                  <td><%= user.created_at %></td>
+                  <td><%= user.login_count %></td>
+                  <td><%= user.last_session_at %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </body>
