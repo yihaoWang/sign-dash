@@ -13,10 +13,15 @@ interface ISendgridConfig {
   templateId: string;
 }
 
+interface IRedisConfig {
+  url: string;
+}
+
 interface IConfig {
   googleAuth: IGoogleAuthConfig;
   app: IAppConfig;
   sendgrid: ISendgridConfig;
+  redis: IRedisConfig;
 }
 
 const config: IConfig = {
@@ -32,6 +37,9 @@ const config: IConfig = {
     "apiKey": process.env.SENDGRID_API_KEY || "",
     "templateId": "d-b76830e0967b4c77bac1dea2a2bdb43e",
   },
+  "redis": {
+    "url": process.env.REDIS_URL || "localhost",
+  }
 }
 
 export default config;
