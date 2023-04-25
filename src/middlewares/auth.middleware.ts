@@ -23,7 +23,7 @@ export function requireAuthentication(requireAccountActive = true) {
 async function isAccountActive(userSession: IUserSession): Promise<boolean> {
   const { from, emailVerified, id } = userSession;
 
-  if (from === 'email' && emailVerified === true) {
+  if (from !== 'email' || emailVerified === true) {
     return true;
   }
 

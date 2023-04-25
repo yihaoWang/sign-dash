@@ -3,6 +3,7 @@ import { OAuth2Client } from 'google-auth-library';
 import config from '../config';
 import AccountModule from '../modules/account.module';
 import EmailSender from '../modules/email-sender.module';
+import SessionModel from '../modules/session.module';
 
 const GOOGLE_CLIENT_ID = config.googleAuth.clientId;
 
@@ -16,7 +17,25 @@ class AuthController {
     });
     const payload = ticket.getPayload();
 
-    res.send(JSON.stringify(payload));
+    if (!payload || !payload.email || !payload.name) {
+      return res.status(400).json({ error: 'invalid token' });
+    }
+
+    let account = await AccountModule.getAccountByEmail(payload.email);
+
+    if (!account) {
+      account = await AccountModule.createAccount({
+        email: payload.email,
+        name: payload.name,
+        register_from: 'google',
+        login_count: 1,
+        last_session_at: new Date(),
+        google_id: payload.sub,
+      });
+    }
+
+    SessionModel.setUserSession(req, account);
+    res.redirect('/dashboard');
   }
 
   async verifyVerificationCode(req: Request, res: Response) {
