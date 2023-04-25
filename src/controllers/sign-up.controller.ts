@@ -24,7 +24,14 @@ class SignUpController {
   }
 
   async createAccount(req: Request, res: Response) {
-    const { email, password } = req.body;
+    const { email, password, confirmedPassword } = req.body;
+
+    if (!email ||!password ||!confirmedPassword) {
+      return res.status(400).json({ message: 'Please check eamil and password are valid' });
+    }
+    if (password !== confirmedPassword) {
+      return res.status(400).json({ message: 'Please check the passwords are the same' });
+    }
 
     if (!AccountModule.isValidPassword(password)) {
       return res.status(400).json({ message: 'Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.' });

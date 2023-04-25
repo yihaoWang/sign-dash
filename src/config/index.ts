@@ -30,7 +30,7 @@ const config: IConfig = {
     "callbackUrl": "/auth/google/callback",
   },
   "app": {
-    "domain": "https://sign-dash.onrender.com",
+    "domain": process.env.SIGN_DASH_DOMAIN || 'http://localhost:3000',
     "sessionSecret": process.env.SESSION_SECRET || "",
   },
   "sendgrid": {

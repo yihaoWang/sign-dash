@@ -12,7 +12,7 @@
       <div class="row justify-content-center">
         <div class="col-md-4 col-sm-12">
           <div class="login">
-            <div>
+            <div class="mb-3">
               <div id="g_id_onload"
                 data-client_id=<%= googleClientId %>
                 data-login_uri=<%= googleAuthCallback %>
@@ -31,15 +31,17 @@
             <div class="form">
               <form id="signup-form">
                 <div class="form-group">
-                  <label for="email">Email:</label>
-                  <input type="text" id="email" class="form-control" name="email" required>
+                  <label for="email">Please enter email:</label>
+                  <input type="text" id="email" name="email" class="form-control mb-3" required>
                 </div>
                 <div class="form-group">
-                  <label for="password">Password:</label>
-                  <input type="password" id="password" name="password" required class="form-control">
+                  <label for="password">Please enter password:</label>
+                  <input type="password" id="password" name="password" required class="form-control mb-3">
+                  <label for="password">Please enter password again:</label>
+                  <input type="password" id="confirmedPassword" name="password" required class="form-control mb-3">
                 </div>
                 <div id="error-message" class="text-danger"></div>
-                <button id="submit-btn" type="submit" class="btn btn-primary btn-block">Login</button>
+                <button id="submit-btn" type="submit" class="btn btn-primary btn-block">Register</button>
               </form>
             </div>
           </div>
@@ -49,7 +51,7 @@
     <script>
       const form = document.getElementById('signup-form');
       const submitBtn = document.getElementById('submit-btn');
-      const errorMessage = document.getElementById('error-message');
+      const errorElement = document.getElementById('error-message');
       const invalidPasswordErrorMessage = 'Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.';
 
       form.addEventListener('submit', async (event) => {
@@ -58,25 +60,18 @@
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+[\]{};':"\\|,.<>\/?]).{8,}$/;
-
-        if (!passwordRegex.test(password)) {
-          const errorElement = document.getElementById('error-message');
-
-          errorMessage.textContent = invalidPasswordErrorMessage;
-
-          return;
-        }
+        const confirmedPassword = document.getElementById('confirmedPassword').value;
 
         try {
           const response = await axios.post('/signup/account', {
             email: email,
-            password: password
+            password: password,
+            confirmedPassword: confirmedPassword,
           });
 
-          window.location.href = '/auth/active-account';
+          window.location.href = '/dashboard';
         } catch (error) {
-          errorMessage.textContent = error.response.data.message;
+          errorElement.textContent = error.response.data.message;
         } finally {
           submitBtn.disabled = false;
         }
