@@ -1,4 +1,5 @@
 import accountController from '../controllers/account.controller';
+import { requireAuthentication } from '../middlewares/auth.middleware';
 import Route from './route';
 
 class AccountRoute extends Route {
@@ -11,8 +12,8 @@ class AccountRoute extends Route {
   }
 
   protected setRoutes() {
-    this.router.put('/name', this.accountController.updteName.bind(this.accountController));
-    this.router.put('/password', this.accountController.updatePassword.bind(this.accountController));
+    this.router.put('/name', requireAuthentication(), this.accountController.updteName.bind(this.accountController));
+    this.router.put('/password', requireAuthentication(), this.accountController.updatePassword.bind(this.accountController));
   }
 }
 

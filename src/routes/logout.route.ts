@@ -1,4 +1,5 @@
 import LogoutController from '../controllers/logout.controller';
+import { requireAuthentication } from '../middlewares/auth.middleware';
 import Route from './route';
 
 class LogoutRoute extends Route {
@@ -11,7 +12,7 @@ class LogoutRoute extends Route {
   }
 
   protected setRoutes() {
-    this.router.get('/', this.logoutController.logout.bind(this.logoutController));
+    this.router.get('/', requireAuthentication(), this.logoutController.logout.bind(this.logoutController));
   }
 }
 
