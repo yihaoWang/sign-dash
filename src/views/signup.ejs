@@ -6,37 +6,52 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
     <script>
+      async function statusChangeCallback(response) {
+        if (response.status === 'connected') {
+          console.log(response);
+          const errorElement = document.getElementById('error-message');
+
+          try {
+            await axios.post('/auth/fb/callback', {
+              userID: response.authResponse.userID,
+              accessToken: response.authResponse.accessToken,
+              expiresIn: response.authResponse.expiresIn,
+              status: response.status,
+            });
+
+            window.location.href = '/dashboard';
+          } catch (error) {
+            errorElement.textContent = error.response.data.message;
+          }
+        }
+      }
+
+      function checkLoginState() {               // Called when a person is finished with the Login Button.
+        FB.getLoginStatus(function(response) {   // See the onlogin handler
+          console.log(JSON.stringify(response));
+          statusChangeCallback(response);
+        });
+      }
+
       window.fbAsyncInit = function() {
         FB.init({
-          appId      : '{your-app-id}',
-          cookie     : true,
-          xfbml      : true,
-          version    : '{api-version}'
+          appId      : '459760307413928',
+          cookie     : true,                     // Enable cookies to allow the server to access the session.
+          xfbml      : true,                     // Parse social plugins on this webpage.
+          version    : 'v16.0'           // Use this Graph API version for this call.
         });
-
-        FB.AppEvents.logPageView();
-
       };
-
-      (function(d, s, id){
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
     </script>
   </head>
   <body class="d-flex justify-content-center align-items-center">
-    <div id="fb-root"></div>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v16.0&appId=459760307413928&autoLogAppEvents=1" nonce="F4ac7Xig"></script>
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-4 col-sm-12">
           <div class="login">
-            <div class="mb-3">
-              <div class="fb-login-button" data-width="420" data-size="" data-button-type="" data-layout="" data-auto-logout-link="false" data-use-continue-as="false"></div>
+            <h4>Register By social account:</h4>
+            <div class="mb-2">
               <div id="g_id_onload"
                 data-client_id="<%= googleClientId %>"
                 data-login_uri="<%= googleAuthCallback %>"
@@ -48,21 +63,21 @@
                 data-theme="outline"
                 data-text="sign_in_with"
                 data-shape="rectangular"
-                data-width="420"
+                data-width="290"
                 data-logo_alignment="left">
               </div>
             </div>
+            <fb:login-button size="xlarge" scope="public_profile,email" onlogin="checkLoginState();">Login with Facebook</fb:login-button>
+            <hr>
+            <h4>Register By email:</h4>
             <div class="form">
               <form id="signup-form">
                 <div class="form-group">
-                  <label for="email">Please enter email:</label>
-                  <input type="text" id="email" name="email" class="form-control mb-3" required>
+                  <input type="text" id="email" name="email" placeholder="Email" class="form-control mb-3 border border-secondary" required>
                 </div>
                 <div class="form-group">
-                  <label for="password">Please enter password:</label>
-                  <input type="password" id="password" name="password" required class="form-control mb-3">
-                  <label for="password">Please enter password again:</label>
-                  <input type="password" id="confirmedPassword" name="password" required class="form-control mb-3">
+                  <input type="password" id="password" name="password" placeholder="Password" required class="form-control mb-3 border border-secondary">
+                  <input type="password" id="confirm" name="confirm" placeholder="Confirm" required class="form-control mb-3 border border-secondary">
                 </div>
                 <div id="error-message" class="text-danger"></div>
                 <button id="submit-btn" type="submit" class="btn btn-primary btn-block">Register</button>
@@ -84,13 +99,13 @@
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        const confirmedPassword = document.getElementById('confirmedPassword').value;
+        const confirm = document.getElementById('confirm').value;
 
         try {
           const response = await axios.post('/signup/account', {
             email: email,
             password: password,
-            confirmedPassword: confirmedPassword,
+            confirmedPassword: confirm,
           });
 
           window.location.href = '/dashboard';

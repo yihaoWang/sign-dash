@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { OAuth2Client } from 'google-auth-library';
+import axios from 'axios';
 import config from '../config';
 import AccountModule from '../modules/account.module';
 import EmailSender from '../modules/email-sender.module';
@@ -35,7 +36,46 @@ class AuthController {
     }
 
     SessionModel.setUserSession(req, account);
-    res.redirect('/dashboard');
+    res.sendStatus(200);
+  }
+
+  async facebookAuthCallback(req: Request, res: Response) {
+    const userID = req.body.userID;
+    const accessToken = req.body.accessToken;
+
+    console.log(req.body);
+    console.log('userID', userID);
+    console.log('accessToken', accessToken);
+
+    try {
+      const { data } = await axios.get(
+        `https://graph.facebook.com/v16.0/${userID}`,
+          {
+          params: {
+            access_token: accessToken,
+            fields: 'id,name,email'
+          }
+        }
+      );
+      let account = await AccountModule.getAccountByEmail(data.email);
+
+      if (!account) {
+        account = await AccountModule.createAccount({
+          email: data.email,
+          name: data.name,
+          register_from: 'facebook',
+          login_count: 1,
+          last_session_at: new Date(),
+          google_id: data.sub,
+        });
+      }
+
+      SessionModel.setUserSession(req, account);
+      res.sendStatus(200);
+    } catch (err) {
+      console.error(err);
+      res.sendStatus(500);
+    }
   }
 
   async verifyVerificationCode(req: Request, res: Response) {
