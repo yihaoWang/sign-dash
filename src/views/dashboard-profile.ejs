@@ -75,10 +75,11 @@
 
         try {
           const response = await axios.put('/account/name', { username });
+
+          errorMessage.textContent = 'Update successful';
         } catch (error) {
           errorMessage.textContent = error.response.data.message;
         } finally {
-          errorMessage.textContent = 'Update successful';
           updateProfileBtn.disabled = false;
         }
       });
@@ -101,10 +102,11 @@
             newPassword1,
             newPassword2,
           });
+
+          errorMessage.textContent = 'Update successful';
         } catch (error) {
           errorMessage.textContent = error.response.data.message;
         } finally {
-          errorMessage.textContent = 'Update successful';
           updatePasswordBtn.disabled = false;
         }
       });
