@@ -18,7 +18,10 @@ export SENDGRID_API_KEY="${YOUR_SENDGRID_API_KEY}"
 export SESSION_SECRET="${SESSION_KEY}"
 export DATABASE_URL="${DATABASE_URL}"
 export REDIS_URL="${REDIS_URL}"
+export SIGN_DASH_DOMAIN="${SIGN_DASH_DOMAIN}"
 ```
+Note: default SIGN_DASH_DOMAIN will be http://localhost:300.
+
 
 Install app
 ```shell
