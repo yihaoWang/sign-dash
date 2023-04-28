@@ -11,6 +11,16 @@ const GOOGLE_AUTH_CALLBACK_POSTFIX = config.googleAuth.callbackUrl;
 const GOOGLE_AUTH_CALLBACK = `${DOMAIN}${GOOGLE_AUTH_CALLBACK_POSTFIX}`;
 
 class SignUpController {
+
+  /**
+   * @openapi
+   * /signup/:
+   *   get:
+   *     description: Render sign up page.
+   *     responses:
+   *       200:
+   *         description: Render sign up page.
+   */
   renderSignUpPage(req: Request, res: Response) {
     res.render('signup', {
       title: 'sing-dash',
@@ -23,6 +33,35 @@ class SignUpController {
     return Boolean(await AccountModule.getAccountByEmail(email));
   }
 
+ /**
+   * @openapi
+   * /signup/account:
+   *   post:
+   *     description: Facebook oauth callback.
+   *     parameters:
+   *       - name: email
+   *         description: email to use for login.
+   *         in: formData
+   *         required: true
+   *         type: string
+   *       - name: password
+   *         description: password to use for login.
+   *         in: formData
+   *         required: true
+   *         type: string
+   *       - name: confirmedPassword
+   *         description: Confirmed password to use for checking password.
+   *         in: formData
+   *         required: true
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: create account by email.
+   *       400:
+   *         description: Bad parameters.
+   *       500:
+   *         description: Internal server error.
+   */
   async createAccount(req: Request, res: Response) {
     const { email, password, confirmedPassword } = req.body;
 

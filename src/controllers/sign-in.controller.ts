@@ -10,6 +10,15 @@ const GOOGLE_AUTH_CALLBACK_POSTFIX = config.googleAuth.callbackUrl;
 const GOOGLE_AUTH_CALLBACK = `${DOMAIN}${GOOGLE_AUTH_CALLBACK_POSTFIX}`;
 
 class SignInController {
+  /**
+   * @openapi
+   * signin/:
+   *   get:
+   *     description: sign in page
+   *     responses:
+   *       200:
+   *         description: render sign page
+   */
   renderSignInPage(req: Request, res: Response) {
     res.render('signin', {
       title: 'sing-dash',
@@ -18,6 +27,30 @@ class SignInController {
     });
   }
 
+  /**
+   * @openapi
+   * /sigin/email-login:
+   *   post:
+   *     description: login to the app by email
+   *     parameters:
+   *       - name: email
+   *         description: email to use for login.
+   *         in: formData
+   *         required: true
+   *         type: string
+   *       - name: password
+   *         description: password to use for login.
+   *         in: formData
+   *         required: true
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: render landing page
+   *       400:
+   *         description: Bad parameters.
+   *       500:
+   *         description: Internal server error.
+   */
   async loginByEmail(req: Request, res: Response) {
     const { email, password } = req.body;
     const account = await AccountModule.getAccountByEmail(email);

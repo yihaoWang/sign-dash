@@ -11,6 +11,15 @@ class DashboardController {
     return date;
   }
 
+  /**
+   * @openapi
+   * /dashboard/profile:
+   *   get:
+   *     description: profile page
+   *     responses:
+   *       200:
+   *         description: render profile page, rediect to landing page if user is not logged in
+   */
   async rednerProfilePage(req: Request, res: Response) {
     const uid = req.session.user?.id;
 
@@ -29,6 +38,15 @@ class DashboardController {
     });
   }
 
+  /**
+   * @openapi
+   * /dashboard/statistics:
+   *   get:
+   *     description: statistics page
+   *     responses:
+   *       200:
+   *         description: render statistics page, rediect to landing page if user is not logged in
+   */
   async rednerStatisticsPage(req: Request, res: Response) {
     const allAccounts = await AccountModule.getAllAccounts({
       'email': true,

@@ -3,6 +3,25 @@ import bcrypt from 'bcrypt';
 import AccountModule from '../modules/account.module';
 
 class AccountController {
+  /**
+   * @openapi
+   * /account/name:
+   *   post:
+   *     description: Update user name.
+   *     parameters:
+   *       - name: username
+   *         description: New user name.
+   *         in: formData
+   *         required: true
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: Updated successfully.
+   *       400:
+   *         description: Bad parameters.
+   *       500:
+   *         description: Internal server error.
+   */
   async updteName(req: Request, res: Response) {
     const uid = req.session.user?.id;
     const { username } = req.body;
@@ -19,6 +38,33 @@ class AccountController {
     return res.sendStatus(200);
   }
 
+  /**
+   * @openapi
+   * /account/name:
+   *   post:
+   *     description: Update user name.
+   *     parameters:
+   *       - name: oldPassword
+   *         description: Old user password.
+   *         in: formData
+   *         required: true
+   *         type: string
+   *       - name: newPassword1
+   *         description: New user password.
+   *         in: formData
+   *         required: true
+   *         type: string
+   *       - name: newPassword2
+   *         description: Confirmed new user password.
+   *         in: formData
+   *         required: true
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: Updated successfully.
+   *       400:
+   *         description: Bad parameters.
+   */
   async updatePassword(req: Request, res: Response) {
     const uid = req.session.user?.id;
     const oldPassword: string = req.body.oldPassword;

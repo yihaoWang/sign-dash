@@ -9,8 +9,27 @@ import SessionModel from '../modules/session.module';
 const GOOGLE_CLIENT_ID = config.googleAuth.clientId;
 
 class AuthController {
+  /**
+   * @openapi
+   * /auth/google/callback:
+   *   post:
+   *     description: Google oauth callback
+   *     parameters:
+   *       - name: credential
+   *         description: credential to use for google login.
+   *         in: formData
+   *         required: true
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: login successful and redirect to /dashboard
+   *       400:
+   *         description: Bad parameters.
+   *       500:
+   *         description: Internal server error.
+   */
   async googleAuthCallback(req: Request, res: Response) {
-    const token = req.body.credential;
+    const token: string = req.body.credential;
     const client = new OAuth2Client(GOOGLE_CLIENT_ID);
     const ticket = await client.verifyIdToken({
       idToken: token,
@@ -39,13 +58,31 @@ class AuthController {
     res.redirect('/dashboard');
   }
 
+  /**
+   * @openapi
+   * /auth/fb/callback:
+   *   post:
+   *     description: Facebook oauth callback.
+   *     parameters:
+   *       - name: userID
+   *         description: User ID to use for facebook login.
+   *         in: formData
+   *         required: true
+   *         type: string
+   *       - name: accessToken
+   *         description: Access Token to use for facebook login.
+   *         in: formData
+   *         required: true
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: login successful and redirect to /dashboard.
+   *       500:
+   *         description: Internal server error.
+   */
   async facebookAuthCallback(req: Request, res: Response) {
-    const userID = req.body.userID;
-    const accessToken = req.body.accessToken;
-
-    console.log(req.body);
-    console.log('userID', userID);
-    console.log('accessToken', accessToken);
+    const userID: string = req.body.userID;
+    const accessToken: string = req.body.accessToken;
 
     try {
       const { data } = await axios.get(
@@ -73,11 +110,29 @@ class AuthController {
       SessionModel.setUserSession(req, account);
       res.sendStatus(200);
     } catch (err) {
-      console.error(err);
       res.sendStatus(500);
     }
   }
 
+  /**
+   * @openapi
+   * /auth/email-verification:
+   *   get:
+   *     description: active account by email verification code.
+   *     parameters:
+   *       - name: code
+   *         description: verification code for active account.
+   *         in: formData
+   *         required: true
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: successful and redirect to /dashboard.
+   *       400:
+   *         description: Bad parameters.
+   *       500:
+   *         description: Internal server error.
+   */
   async verifyVerificationCode(req: Request, res: Response) {
     const code: string = req.query.code as string
 
@@ -90,14 +145,36 @@ class AuthController {
 
       res.redirect('/dashboard');
     } catch (error) {
-      console.error(error);
+      res.sendStatus(500);
     }
   }
 
+  /**
+   * @openapi
+   * /auth/active-account:
+   *   get:
+   *     description: Render active account page.
+   *     responses:
+   *       200:
+   *         description: render active account page.
+   */
   renderActiveAccountPage(req: Request, res: Response) {
     res.render('active-account');
   }
 
+  /**
+   * @openapi
+   * /auth/resend-account-verification:
+   *   get:
+   *     description: re-send verification code.
+   *     responses:
+   *       200:
+   *         description: successful and redirect to /dashboard.
+   *       400:
+   *         description: Bad parameters.
+   *       500:
+   *         description: Internal server error.
+   */
   async resendAccountVerification(req: Request, res: Response) {
     const email = req.session.user?.email;
 
