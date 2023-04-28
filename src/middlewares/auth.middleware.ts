@@ -4,27 +4,31 @@ import AccountModule from '../modules/account.module';
 
 export function requireAuthentication(requireAccountActive = true) {
   return async (req: Request, res: Response, next: NextFunction) => {
-    if (!req.session.user) {
-      return res.redirect('/');
-    }
+    try {
+      if (!req.session.user) {
+        return res.redirect('/');
+      }
 
-    const uid = req.session.user.id;
-    const account = await AccountModule.getAccountById(uid);
+      const uid = req.session.user.id;
+      const account = await AccountModule.getAccountById(uid);
 
-    if (!account) {
-      req.session.user = undefined;
-      return res.redirect('/');
-    }
+      if (!account) {
+        req.session.user = undefined;
+        return res.redirect('/');
+      }
 
-    if (SessionModel.shouldUpdateSessionTime(req)) {
-      SessionModel.updateSessionTime(req);
-      AccountModule.updateAccountById(uid, { last_session_at: new Date() });  // don't wait
-    }
+      if (SessionModel.shouldUpdateSessionTime(req)) {
+        SessionModel.updateSessionTime(req);
+        AccountModule.updateAccountById(uid, { last_session_at: new Date() });  // don't wait
+      }
 
-    if (requireAccountActive && !await isAccountActive(req.session.user)) {
-      return res.redirect('/auth/active-account');
+      if (requireAccountActive && !await isAccountActive(req.session.user)) {
+        return res.redirect('/auth/active-account');
+      }
+      next();
+    } catch (err) {
+      next(err);
     }
-    next();
   }
 }
 

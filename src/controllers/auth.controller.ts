@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { OAuth2Client } from 'google-auth-library';
 import axios from 'axios';
 import config from '../config';
@@ -28,34 +28,38 @@ class AuthController {
    *       500:
    *         description: Internal server error.
    */
-  async googleAuthCallback(req: Request, res: Response) {
-    const token: string = req.body.credential;
-    const client = new OAuth2Client(GOOGLE_CLIENT_ID);
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: GOOGLE_CLIENT_ID,
-    });
-    const payload = ticket.getPayload();
-
-    if (!payload || !payload.email || !payload.name) {
-      return res.status(400).json({ error: 'invalid token' });
-    }
-
-    let account = await AccountModule.getAccountByEmail(payload.email);
-
-    if (!account) {
-      account = await AccountModule.createAccount({
-        email: payload.email,
-        name: payload.name,
-        register_from: 'google',
-        login_count: 1,
-        last_session_at: new Date(),
-        google_id: payload.sub,
+  async googleAuthCallback(req: Request, res: Response, next: NextFunction) {
+    try{
+      const token: string = req.body.credential;
+      const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: GOOGLE_CLIENT_ID,
       });
-    }
+      const payload = ticket.getPayload();
 
-    SessionModel.setUserSession(req, account);
-    res.redirect('/dashboard');
+      if (!payload || !payload.email || !payload.name) {
+        return res.status(400).json({ error: 'invalid token' });
+      }
+
+      let account = await AccountModule.getAccountByEmail(payload.email);
+
+      if (!account) {
+        account = await AccountModule.createAccount({
+          email: payload.email,
+          name: payload.name,
+          register_from: 'google',
+          login_count: 1,
+          last_session_at: new Date(),
+          google_id: payload.sub,
+        });
+      }
+
+      SessionModel.setUserSession(req, account);
+      res.redirect('/dashboard');
+    } catch (err) {
+      next(err);
+    }
   }
 
   /**
@@ -80,11 +84,10 @@ class AuthController {
    *       500:
    *         description: Internal server error.
    */
-  async facebookAuthCallback(req: Request, res: Response) {
-    const userID: string = req.body.userID;
-    const accessToken: string = req.body.accessToken;
-
+  async facebookAuthCallback(req: Request, res: Response, next: NextFunction) {
     try {
+      const userID: string = req.body.userID;
+      const accessToken: string = req.body.accessToken;
       const { data } = await axios.get(
         `https://graph.facebook.com/v16.0/${userID}`,
           {
@@ -110,7 +113,7 @@ class AuthController {
       SessionModel.setUserSession(req, account);
       res.sendStatus(200);
     } catch (err) {
-      res.sendStatus(500);
+      next(err);
     }
   }
 
@@ -133,19 +136,23 @@ class AuthController {
    *       500:
    *         description: Internal server error.
    */
-  async verifyVerificationCode(req: Request, res: Response) {
-    const code: string = req.query.code as string
-
-    if (!code) {
-      return res.status(400).send({ error: 'Invalid verification code' });
-    }
-
+  async verifyVerificationCode(req: Request, res: Response, next: NextFunction) {
     try {
-      await AccountModule.verifyVerificationCode(code);
+      const code: string = req.query.code as string
 
-      res.redirect('/dashboard');
-    } catch (error) {
-      res.sendStatus(500);
+      if (!code) {
+        return res.status(400).send({ error: 'Invalid verification code' });
+      }
+
+      try {
+        await AccountModule.verifyVerificationCode(code);
+
+        res.redirect('/dashboard');
+      } catch (error) {
+        res.sendStatus(500);
+      }
+    } catch (err) {
+      next(err);
     }
   }
 
@@ -157,9 +164,15 @@ class AuthController {
    *     responses:
    *       200:
    *         description: render active account page.
+   *       500:
+   *         description: Internal server error.
    */
-  renderActiveAccountPage(req: Request, res: Response) {
-    res.render('active-account');
+  renderActiveAccountPage(req: Request, res: Response, next: NextFunction) {
+      try {
+        res.render('active-account');
+      } catch (err) {
+      next(err);
+    }
   }
 
   /**
@@ -175,16 +188,20 @@ class AuthController {
    *       500:
    *         description: Internal server error.
    */
-  async resendAccountVerification(req: Request, res: Response) {
-    const email = req.session.user?.email;
+  async resendAccountVerification(req: Request, res: Response, next: NextFunction) {
+    try {
+      const email = req.session.user?.email;
 
-    if (!email) {
-      return res.status(400).json({ message: 'Bad request.' });
+      if (!email) {
+        return res.status(400).json({ message: 'Bad request.' });
+      }
+      const verificationCode = await AccountModule.createVerificationCode(email);
+
+      await EmailSender.sendVerificationEmail(email, verificationCode);
+      res.sendStatus(200);
+    } catch (err) {
+      next(err);
     }
-    const verificationCode = await AccountModule.createVerificationCode(email);
-
-    await EmailSender.sendVerificationEmail(email, verificationCode);
-    res.sendStatus(200);
   }
 }
 

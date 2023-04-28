@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import config from '../config';
 import AccountModule from '../modules/account.module';
@@ -19,14 +19,20 @@ class SignInController {
    *     responses:
    *       200:
    *         description: render sign page
+   *       500:
+   *         description: Internal server error.
    */
-  renderSignInPage(req: Request, res: Response) {
-    res.render('signin', {
-      title: 'sing-dash',
-      fbAuthId: FB_CLIENT_ID,
-      googleAuthCallback: GOOGLE_AUTH_CALLBACK,
-      googleClientId: GOOGLE_CLIENT_ID,
-    });
+  renderSignInPage(req: Request, res: Response, next: NextFunction) {
+    try {
+      res.render('signin', {
+        title: 'sing-dash',
+        fbAuthId: FB_CLIENT_ID,
+        googleAuthCallback: GOOGLE_AUTH_CALLBACK,
+        googleClientId: GOOGLE_CLIENT_ID,
+      });
+    } catch (err) {
+      next(err);
+    }
   }
 
   /**
@@ -53,24 +59,28 @@ class SignInController {
    *       500:
    *         description: Internal server error.
    */
-  async loginByEmail(req: Request, res: Response) {
-    const { email, password } = req.body;
-    const account = await AccountModule.getAccountByEmail(email);
+  async loginByEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, password } = req.body;
+      const account = await AccountModule.getAccountByEmail(email);
 
-    if (!account || !account.password) {
-      return res.status(400).json({ message: 'Invalid email or password.' });
+      if (!account || !account.password) {
+        return res.status(400).json({ message: 'Invalid email or password.' });
+      }
+
+      if (!bcrypt.compareSync(password, account.password)) {
+        return res.status(400).json({ message: 'Invalid email or password.' });
+      }
+
+      await AccountModule.updateAccountById(account.id, {
+        login_count: account.login_count + 1,
+        last_session_at: new Date(),
+      });
+      SessionModel.setUserSession(req, account);
+      res.sendStatus(200);
+    } catch (err) {
+      next(err);
     }
-
-    if (!bcrypt.compareSync(password, account.password)) {
-      return res.status(400).json({ message: 'Invalid email or password.' });
-    }
-
-    await AccountModule.updateAccountById(account.id, {
-      login_count: account.login_count + 1,
-      last_session_at: new Date(),
-    });
-    SessionModel.setUserSession(req, account);
-    res.sendStatus(200);
   }
 }
 

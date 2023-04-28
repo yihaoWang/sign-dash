@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 class IndexController {
   /**
@@ -9,13 +9,19 @@ class IndexController {
    *     responses:
    *       200:
    *         description: render landing page
+   *       500:
+   *         description: Internal server error.
    */
-  rednerHomePage(req: Request, res: Response) {
-    if (req.session.user) {
-      return res.redirect('/dashboard');
-    }
+  rednerHomePage(req: Request, res: Response, next: NextFunction) {
+    try {
+      if (req.session.user) {
+        return res.redirect('/dashboard');
+      }
 
-    res.render('index', { title: 'sing-dash' });
+      res.render('index', { title: 'sing-dash' });
+    } catch (err) {
+      next(err);
+    }
   }
 }
 

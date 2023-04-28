@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import config from '../config';
 import AccountModule from '../modules/account.module';
@@ -21,14 +21,20 @@ class SignUpController {
    *     responses:
    *       200:
    *         description: Render sign up page.
+   *       500:
+   *         description: Internal server error.
    */
-  renderSignUpPage(req: Request, res: Response) {
-    res.render('signup', {
-      title: 'sing-dash',
-      fbAuthId: FB_CLIENT_ID,
-      googleAuthCallback: GOOGLE_AUTH_CALLBACK,
-      googleClientId: GOOGLE_CLIENT_ID,
-    });
+  renderSignUpPage(req: Request, res: Response, next: NextFunction) {
+    try {
+      res.render('signup', {
+        title: 'sing-dash',
+        fbAuthId: FB_CLIENT_ID,
+        googleAuthCallback: GOOGLE_AUTH_CALLBACK,
+        googleClientId: GOOGLE_CLIENT_ID,
+      });
+    } catch (err) {
+      next(err);
+    }
   }
 
   async isAccountExists(email: string): Promise<Boolean> {
@@ -64,36 +70,40 @@ class SignUpController {
    *       500:
    *         description: Internal server error.
    */
-  async createAccount(req: Request, res: Response) {
-    const { email, password, confirmedPassword } = req.body;
+  async createAccount(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, password, confirmedPassword } = req.body;
 
-    if (!email ||!password ||!confirmedPassword) {
-      return res.status(400).json({ message: 'Please check eamil and password are valid' });
+      if (!email ||!password ||!confirmedPassword) {
+        return res.status(400).json({ message: 'Please check eamil and password are valid' });
+      }
+      if (password !== confirmedPassword) {
+        return res.status(400).json({ message: 'Please check the passwords are the same' });
+      }
+
+      if (!AccountModule.isValidPassword(password)) {
+        return res.status(400).json({ message: 'Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.' });
+      }
+
+      if (await this.isAccountExists(email)) {
+        return res.status(400).json({ message: 'Email is already registered.' });
+      }
+
+      const account = await AccountModule.createAccount({
+        email: email,
+        password: bcrypt.hashSync(password, 10),
+        register_from: 'email',
+        login_count: 1,
+        last_session_at: new Date(),
+      });
+      SessionModel.setUserSession(req, account);
+      const verificationCode = await AccountModule.createVerificationCode(email);
+
+      await EmailSender.sendVerificationEmail(email, verificationCode);
+      res.sendStatus(200);
+    } catch (err) {
+      next(err);
     }
-    if (password !== confirmedPassword) {
-      return res.status(400).json({ message: 'Please check the passwords are the same' });
-    }
-
-    if (!AccountModule.isValidPassword(password)) {
-      return res.status(400).json({ message: 'Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.' });
-    }
-
-    if (await this.isAccountExists(email)) {
-      return res.status(400).json({ message: 'Email is already registered.' });
-    }
-
-    const account = await AccountModule.createAccount({
-      email: email,
-      password: bcrypt.hashSync(password, 10),
-      register_from: 'email',
-      login_count: 1,
-      last_session_at: new Date(),
-    });
-    SessionModel.setUserSession(req, account);
-    const verificationCode = await AccountModule.createVerificationCode(email);
-
-    await EmailSender.sendVerificationEmail(email, verificationCode);
-    res.sendStatus(200);
   }
 }
 
