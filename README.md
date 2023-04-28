@@ -10,7 +10,7 @@ See the [API Docs](https://sign-dash.onrender.com/api-docs/)
 - Node.js >= v16
 
 ### Install
-Set up env
+#### Set up env
 ```shell
 export GOOGLE_AUTH_CLIENT_ID="${YOUR_GOOGLE_CLIENT_ID}"
 export FB_AUTH_CLIENT_ID="${YOUR_FB_CLIENT_ID}"
@@ -23,12 +23,12 @@ export SIGN_DASH_DOMAIN="${SIGN_DASH_DOMAIN}"
 Note: default SIGN_DASH_DOMAIN will be http://localhost:300.
 
 
-Install app
+#### Install app
 ```shell
 yarn install
 ```
 
-Run App
+#### Run App
 ```shell
 yarn dev
 ```
