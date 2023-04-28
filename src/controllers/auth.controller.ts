@@ -36,7 +36,7 @@ class AuthController {
     }
 
     SessionModel.setUserSession(req, account);
-    res.sendStatus(200);
+    res.redirect('/dashboard');
   }
 
   async facebookAuthCallback(req: Request, res: Response) {

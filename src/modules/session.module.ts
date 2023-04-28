@@ -21,7 +21,7 @@ export default class SessionModel {
       from: account.register_from,
     };
 
-    req.session.lastSessionAt = Date.now();
+    req.session.lastSessionAt = account.last_session_at.getTime();
   }
 
   static shouldUpdateSessionTime(req: Request) {

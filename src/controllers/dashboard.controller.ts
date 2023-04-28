@@ -46,9 +46,6 @@ class DashboardController {
       last_session_at && last_session_at.getTime() >= dateOfLast7Day.getTime()
     )).length;
 
-    console.log(dateOfLast7Day.getTime());
-
-
     res.render('dashboard-statistics', {
       users: allAccounts,
       stats: {
