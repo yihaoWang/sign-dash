@@ -5,7 +5,6 @@ interface IGoogleAuthConfig {
 
 interface IFBAuthConfig {
   clientId: string;
-  secretId: string;
   callbackUrl: string;
 }
 
@@ -38,7 +37,6 @@ const config: IConfig = {
   },
   "fbAuth": {
     "clientId": process.env.FB_AUTH_CLIENT_ID || "",
-    "secretId": process.env.FB_AUTH_SECRET_ID || "",
     "callbackUrl": "/auth/fb/callback",
   },
   "app": {

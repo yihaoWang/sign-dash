@@ -8,6 +8,7 @@ const DOMAIN = config.app.domain;
 const GOOGLE_CLIENT_ID = config.googleAuth.clientId;
 const GOOGLE_AUTH_CALLBACK_POSTFIX = config.googleAuth.callbackUrl;
 const GOOGLE_AUTH_CALLBACK = `${DOMAIN}${GOOGLE_AUTH_CALLBACK_POSTFIX}`;
+const FB_CLIENT_ID = config.fbAuth.clientId;
 
 class SignInController {
   /**
@@ -22,6 +23,7 @@ class SignInController {
   renderSignInPage(req: Request, res: Response) {
     res.render('signin', {
       title: 'sing-dash',
+      fbAuthId: FB_CLIENT_ID,
       googleAuthCallback: GOOGLE_AUTH_CALLBACK,
       googleClientId: GOOGLE_CLIENT_ID,
     });

@@ -8,6 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
     <script>
+      const fbAuthId = <%= fbAuthId %>;
+
       async function statusChangeCallback(response) {
         if (response.status === 'connected') {
           console.log(response);
@@ -37,7 +39,7 @@
 
       window.fbAsyncInit = function() {
         FB.init({
-          appId      : '459760307413928',
+          appId      : fbAuthId,
           cookie     : true,                     // Enable cookies to allow the server to access the session.
           xfbml      : true,                     // Parse social plugins on this webpage.
           version    : 'v16.0'           // Use this Graph API version for this call.
