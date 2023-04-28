@@ -8,6 +8,7 @@ import {createClient} from 'redis'
 import RedisStore from 'connect-redis'
 
 import router from './router';
+import { errorHandler } from './middlewares/error-hander.middleware';
 import { IUserSession } from './modules/session.module';
 import config from './config';
 
@@ -61,5 +62,7 @@ app.set('view engine', 'ejs');
 router.forEach((route) => {
   app.use(route.getPrefix(), route.getRouter());
 });
+
+app.use(errorHandler);
 
 export default app;

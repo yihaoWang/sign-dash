@@ -8,9 +8,17 @@ export function requireAuthentication(requireAccountActive = true) {
       return res.redirect('/');
     }
 
+    const uid = req.session.user.id;
+    const account = await AccountModule.getAccountById(uid);
+
+    if (!account) {
+      req.session.user = undefined;
+      return res.redirect('/');
+    }
+
     if (SessionModel.shouldUpdateSessionTime(req)) {
       SessionModel.updateSessionTime(req);
-      AccountModule.updateAccountById(req.session.user.id, { last_session_at: new Date() });  // don't wait
+      AccountModule.updateAccountById(uid, { last_session_at: new Date() });  // don't wait
     }
 
     if (requireAccountActive && !await isAccountActive(req.session.user)) {
