@@ -35,7 +35,7 @@ class SignUpController {
     return Boolean(await AccountModule.getAccountByEmail(email));
   }
 
- /**
+  /**
    * @openapi
    * /signup/account:
    *   post:

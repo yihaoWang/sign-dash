@@ -67,12 +67,17 @@ class AccountController {
    */
   async updatePassword(req: Request, res: Response) {
     const uid = req.session.user?.id;
+    const from = req.session.user?.from;
     const oldPassword: string = req.body.oldPassword;
     const password1: string = req.body.newPassword1;
     const password2: string = req.body.newPassword2;
 
     if (!uid) {
       return res.status(400).json({ message: 'Missing account, please re-login' });
+    }
+
+    if (from !== 'email') {
+      return res.status(400).json({ message: 'User from social login don\'t need password' });
     }
 
     if (password1 !== password2) {
