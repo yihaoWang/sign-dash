@@ -53,6 +53,11 @@ class AuthController {
           last_session_at: new Date(),
           google_id: payload.sub,
         });
+      } else {
+        await AccountModule.updateAccountById(account.id, {
+          login_count: account.login_count + 1,
+          last_session_at: new Date(),
+        });
       }
 
       SessionModel.setUserSession(req, account);
@@ -107,6 +112,11 @@ class AuthController {
           login_count: 1,
           last_session_at: new Date(),
           google_id: data.sub,
+        });
+      } else {
+        await AccountModule.updateAccountById(account.id, {
+          login_count: account.login_count + 1,
+          last_session_at: new Date(),
         });
       }
 
