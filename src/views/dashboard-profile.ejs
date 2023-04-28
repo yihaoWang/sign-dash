@@ -69,6 +69,7 @@
       profileForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         updateProfileBtn.disabled = true;
+        errorMessage.textContent = '';
 
         const username = document.getElementById('username').value;
 
@@ -77,6 +78,7 @@
         } catch (error) {
           errorMessage.textContent = error.response.data.message;
         } finally {
+          errorMessage.textContent = 'Update successful';
           updateProfileBtn.disabled = false;
         }
       });
@@ -87,6 +89,7 @@
       passwordForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         updatePasswordBtn.disabled = true;
+        errorMessage.textContent = '';
 
         const oldPassword = document.getElementById('old-password').value;
         const newPassword1 = document.getElementById('new-password').value;
@@ -101,6 +104,7 @@
         } catch (error) {
           errorMessage.textContent = error.response.data.message;
         } finally {
+          errorMessage.textContent = 'Update successful';
           updatePasswordBtn.disabled = false;
         }
       });
