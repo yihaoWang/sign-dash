@@ -53,7 +53,7 @@ class AuthController {
           last_session_at: new Date(),
           google_id: payload.sub,
         });
-      } else if (account.email === payload.email && account.register_from === 'email') {
+      } else if (account.email === payload.email && account.register_from !== 'google') {
         return res.redirect(`/signup?errorMessage=${encodeURIComponent('This email was already registerd')}`);
       } else {
         await AccountModule.updateAccountById(account.id, {
@@ -115,7 +115,7 @@ class AuthController {
           last_session_at: new Date(),
           google_id: data.sub,
         });
-      } else if (account.email === data.email && account.register_from === 'email') {
+      } else if (account.email === data.email && account.register_from !== 'facebook') {
         return res.status(400).json({ message: 'This email was already registerd' });
       } else {
         await AccountModule.updateAccountById(account.id, {
