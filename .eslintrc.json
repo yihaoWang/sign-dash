@@ -25,7 +25,9 @@
         "project": "./tsconfig.json"
     },
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "ejs",
+        "ejs-js"
     ],
     "rules": {
       "class-methods-use-this": "off"

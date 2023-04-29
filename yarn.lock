@@ -310,7 +310,7 @@
 
 "@types/morgan@^1.9.4":
   version "1.9.4"
-  resolved "https://registry.npmjs.org/@types/morgan/-/morgan-1.9.4.tgz"
+  resolved "https://registry.yarnpkg.com/@types/morgan/-/morgan-1.9.4.tgz#99965ad2bdc7c5cee28d8ce95cfa7300b19ea562"
   integrity sha512-cXoc4k+6+YAllH3ZHmx4hf7La1dzUk6keTR4bF4b4Sc0mZxU/zK4wO7l+ZzezXm/jkYj/qC+uYGZrarZdIVvyQ==
   dependencies:
     "@types/node" "*"
@@ -1070,6 +1070,16 @@ eslint-config-airbnb-typescript@^17.0.0:
   integrity sha512-elNiuzD0kPAPTXjFWg+lE24nMdHMtuxgYoD30OyMD6yrW1AhFZPAg27VX7d3tzOErw+dgJTNWfRSDqEcXb4V0g==
   dependencies:
     eslint-config-airbnb-base "^15.0.0"
+
+eslint-plugin-ejs-js@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-ejs-js/-/eslint-plugin-ejs-js-0.1.0.tgz#c72bafd6b9e280d518028b5a465320900ff93395"
+  integrity sha512-hMeS+JFv1B8mJrhelXQ53xOueC/VlR4xu4tj1fmk2TO9bg4EzlJmubop+7zafhW9X8LSauQsFFAI0BsqTLHF2Q==
+
+eslint-plugin-ejs@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-ejs/-/eslint-plugin-ejs-0.0.2.tgz#d17be92e8010262491d11efbeba7d626681eb18d"
+  integrity sha512-+84/3PtAyzI+3FQQvnmOX1+cY1jiiTNpLvpzIE/v0KApzBEL4UZ+Rg4YsM0GlM4QRav8EwDAQcSh2X0QbA5jkQ==
 
 eslint-scope@^5.1.1:
   version "5.1.1"
