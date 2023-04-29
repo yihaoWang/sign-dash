@@ -8,11 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
     <script>
-      const fbAuthId = <%= fbAuthId %>;
-
       async function statusChangeCallback(response) {
         if (response.status === 'connected') {
-          console.log(response);
           const errorElement = document.getElementById('error-message');
 
           try {
@@ -39,7 +36,7 @@
 
       window.fbAsyncInit = function() {
         FB.init({
-          appId      : fbAuthId,
+          appId      : <%= fbAuthId %>,
           cookie     : true,                     // Enable cookies to allow the server to access the session.
           xfbml      : true,                     // Parse social plugins on this webpage.
           version    : 'v16.0'           // Use this Graph API version for this call.
@@ -81,7 +78,7 @@
                   <input type="password" id="password" name="password" placeholder="Password" required class="form-control mb-3 border border-secondary">
                   <input type="password" id="confirm" name="confirm" placeholder="Confirm" required class="form-control mb-3 border border-secondary">
                 </div>
-                <div id="error-message" class="text-danger"></div>
+                <div id="error-message" class="text-danger mb-2"><%= errorMessage %></div>
                 <button id="submit-btn" type="submit" class="btn btn-primary btn-block">Register</button>
               </form>
             </div>

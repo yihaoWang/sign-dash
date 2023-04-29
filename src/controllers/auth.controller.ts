@@ -39,7 +39,7 @@ class AuthController {
       const payload = ticket.getPayload();
 
       if (!payload || !payload.email || !payload.name) {
-        return res.status(400).json({ error: 'invalid token' });
+        return res.redirect(`/signup?errorMessage=${encodeURIComponent('Google ligin failed: Invalid token')}`);
       }
 
       let account = await AccountModule.getAccountByEmail(payload.email);
@@ -53,6 +53,8 @@ class AuthController {
           last_session_at: new Date(),
           google_id: payload.sub,
         });
+      } else if (account.email === payload.email && account.register_from === 'email') {
+        return res.redirect(`/signup?errorMessage=${encodeURIComponent('This email was already registerd')}`);
       } else {
         await AccountModule.updateAccountById(account.id, {
           login_count: account.login_count + 1,
@@ -113,6 +115,8 @@ class AuthController {
           last_session_at: new Date(),
           google_id: data.sub,
         });
+      } else if (account.email === data.email && account.register_from === 'email') {
+        return res.status(400).json({ message: 'This email was already registerd' });
       } else {
         await AccountModule.updateAccountById(account.id, {
           login_count: account.login_count + 1,

@@ -26,8 +26,11 @@ class SignUpController {
    */
   renderSignUpPage(req: Request, res: Response, next: NextFunction) {
     try {
+      const errorMessage = req.query.errorMessage || '';
+
       res.render('signup', {
-        title: 'sing-dash',
+        title: 'sing up',
+        errorMessage: errorMessage,
         fbAuthId: FB_CLIENT_ID,
         googleAuthCallback: GOOGLE_AUTH_CALLBACK,
         googleClientId: GOOGLE_CLIENT_ID,
