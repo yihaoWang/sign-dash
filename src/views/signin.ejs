@@ -45,11 +45,29 @@
       };
     </script>
   </head>
-  <body class="d-flex justify-content-center align-items-center">
-    <div class="container">
+  <body class="d-flex" data-bs-theme="light">
+    <div class="container-fluid">
+      <nav class="navbar navbar navbar-expand-lg">
+        <a class="navbar-brand" href="/">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="/signup">Sign Up</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/signin">Sign In</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
       <div class="row justify-content-center">
         <div class="col-md-4 col-sm-12">
           <div class="login">
+            <h4>Login by Social Account:</h4>
             <div class="mb-3">
               <div id="g_id_onload"
                 data-client_id=<%= googleClientId %>
@@ -68,7 +86,7 @@
             </div>
             <fb:login-button size="xlarge" scope="public_profile,email" onlogin="checkLoginState();">Login with Facebook</fb:login-button>
             <hr>
-            <h4>Register By email:</h4>
+            <h4>Login by Email:</h4>
             <div class="form">
               <form id="signup-form">
                 <div class="form-group">
