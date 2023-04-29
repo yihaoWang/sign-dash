@@ -89,7 +89,7 @@ class SignUpController {
       }
 
       if (await this.isAccountExists(email)) {
-        return res.status(400).json({ message: 'Email is already registered.' });
+        return res.status(400).json({ message: 'Email was already registered.' });
       }
 
       const account = await AccountModule.createAccount({

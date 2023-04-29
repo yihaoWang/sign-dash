@@ -12,8 +12,8 @@ class AccountRoute extends Route {
   }
 
   protected setRoutes() {
-    this.router.put('/name', requireAuthentication(), this.accountController.updteName.bind(this.accountController));
-    this.router.put('/password', requireAuthentication(), this.accountController.updatePassword.bind(this.accountController));
+    this.router.put('/name', requireAuthentication(false), this.accountController.updteName.bind(this.accountController));
+    this.router.put('/password', requireAuthentication(false), this.accountController.updatePassword.bind(this.accountController));
   }
 }
 

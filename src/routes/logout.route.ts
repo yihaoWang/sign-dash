@@ -12,7 +12,7 @@ class LogoutRoute extends Route {
   }
 
   protected setRoutes() {
-    this.router.get('/', requireAuthentication(), this.logoutController.logout.bind(this.logoutController));
+    this.router.get('/', requireAuthentication(false), this.logoutController.logout.bind(this.logoutController));
   }
 }
 

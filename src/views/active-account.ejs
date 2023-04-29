@@ -2,15 +2,62 @@
 <html>
   <head>
     <title>Resend Email Verification</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
-  <body>
-    <div class="container">
-      <h1>Account is not active!</h1></dev>
-      <p>Please check mail box or click on the button below to resend the email verification.</p>
-      <form action="/auth/resend-account-verification" method="POST">
-        <button type="submit">Resend Email Verification</button>
-      </form>
+  <body class="d-flex" data-bs-theme="light">
+    <div class="container-fluid">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="/">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="/dashboard/profile">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/dashboard/statistics">Dashboard</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="row justify-content-center">
+        <div class="col-md-4 col-sm-12">
+          <h1>Account is not active!</h1></dev>
+          <p>Please check mail box or click on the button below to resend the email verification.</p>
+          <form id="resend-code-form">
+            <div id="error-message" class="text-danger mb-3"></div>
+            <button type="submit" id="resend-code-button" class="btn btn-primary">Resend Email Verification</button>
+          </form>
+        </div>
+      </div>
     </div>
+    <script>
+      const resendCodeForm = document.getElementById('resend-code-form');
+      const resendCodeBtn = document.getElementById('resend-code-button');
+      const errorMessage = document.getElementById('error-message');
+
+      resendCodeForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        resendCodeBtn.disabled = true;
+        errorMessage.textContent = '';
+
+        try {
+          const response = await axios.post('/auth/resend-account-verification');
+
+          errorMessage.textContent = 'Verification code has sent successful, please check your email box';
+        } catch (error) {
+          console.log(error);
+          errorMessage.textContent = error.response.data.message;
+        } finally {
+          resendCodeBtn.disabled = false;
+        }
+      });
+    </script>
   </body>
 </html>

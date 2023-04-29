@@ -124,7 +124,7 @@
             confirmedPassword: confirm,
           });
 
-          window.location.href = '/dashboard';
+          window.location.href = '/auth/active-account';
         } catch (error) {
           errorElement.textContent = error.response.data.message;
         } finally {
